@@ -1,105 +1,64 @@
-import org.junit.Test;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class RomanNumbersTest {
 
-  @Test
-  public void returnsI() {
-    assertThat(toRoman(1), is("I"));
+class RomanNumbersTest {
+
+  private static final Map<Integer, String> LOOKUP = new LinkedHashMap<>() {{
+    put(50, "L");
+    put(40, "XL");
+    put(10, "X");
+    put(9, "IX");
+    put(5, "V");
+    put(4, "IV");
+    put(1, "I");
+  }};
+
+  @DisplayName("Roman Literals")
+  @ParameterizedTest(name = "The roman literal representation of \"{0}\" should be {1}")
+  @MethodSource("parameters")
+  void inputShouldResultIn(int input, String result) {
+    assertThat(toRoman(input)).isEqualTo(result);
   }
 
-  @Test
-  public void returnsII() {
-    assertThat(toRoman(2), is("II"));
-  }
-
-  @Test
-  public void returnsIII() {
-    assertThat(toRoman(3), is("III"));
-  }
-
-  @Test
-  public void returnsIV() {
-    assertThat(toRoman(4), is("IV"));
-  }
-
-  @Test
-  public void returnsV() {
-    assertThat(toRoman(5), is("V"));
-  }
-
-  @Test
-  public void returnsVI() {
-    assertThat(toRoman(6), is("VI"));
-    assertThat(toRoman(7), is("VII"));
-    assertThat(toRoman(8), is("VIII"));
-  }
-
-  @Test
-  public void returnsIX() {
-    assertThat(toRoman(9), is("IX"));
-  }
-
-  @Test
-  public void returnsX() {
-    assertThat(toRoman(10), is("X"));
-  }
-
-  @Test
-  public void returnsXI() {
-    assertThat(toRoman(11), is("XI"));
-  }
-
-  @Test
-  public void returnsSpecials() {
-    assertThat(toRoman(14), is("XIV"));
-    assertThat(toRoman(15), is("XV"));
-    assertThat(toRoman(19), is("XIX"));
-    assertThat(toRoman(39), is("XXXIX"));
-  }
-
-  @Test
-  public void returnsXL() {
-    assertThat(toRoman(40), is("XL"));
-    assertThat(toRoman(44), is("XLIV"));
-    assertThat(toRoman(49), is("XLIX"));
-  }
-
-  @Test
-  public void returnsL() {
-    assertThat(toRoman(50), is("L"));
-  }
-
-  @Test
-  public void returnsWhatever() {
-    assertThat(toRoman(0), is(""));
+  private static Stream<Arguments> parameters() {
+    return Stream.of(
+        Arguments.of(1, "I"),
+        Arguments.of(2, "II"),
+        Arguments.of(3, "III"),
+        Arguments.of(4, "IV"),
+        Arguments.of(5, "V"),
+        Arguments.of(6, "VI"),
+        Arguments.of(7, "VII"),
+        Arguments.of(8, "VIII"),
+        Arguments.of(9, "IX"),
+        Arguments.of(10, "X"),
+        Arguments.of(11, "XI"),
+        Arguments.of(14, "XIV"),
+        Arguments.of(15, "XV"),
+        Arguments.of(19, "XIX"),
+        Arguments.of(39, "XXXIX"),
+        Arguments.of(40, "XL"),
+        Arguments.of(44, "XLIV"),
+        Arguments.of(49, "XLIX"),
+        Arguments.of(50, "L"));
   }
 
   private String toRoman(int number) {
-    Map<Integer, String> lookup = new LinkedHashMap<>();
-    lookup.put(50, "L");
-    lookup.put(40, "XL");
-    lookup.put(10, "X");
-    lookup.put(9, "IX");
-    lookup.put(5, "V");
-    lookup.put(4, "IV");
-    lookup.put(1, "I");
-
-    if (lookup.containsKey(number)) {
-      return lookup.get(number);
+    if (LOOKUP.containsKey(number)) {
+      return LOOKUP.get(number);
     }
 
-//    Map<Integer, Integer> intervals = Set.of(5,10);
-//    if(intervals.contains(number) && number > intervals.get(number)) {
-//      return toRoman(number) + toRoman(intervals.get(number) - number);
-//    }
-
-    for (int current : lookup.keySet()) {
+    for (int current : LOOKUP.keySet()) {
       if (number > current) {
         return toRoman(current) + toRoman(number - current);
       }

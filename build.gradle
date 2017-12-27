@@ -1,14 +1,30 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    // The following is only necessary if you want to use SNAPSHOT releases.
+    // maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+  }
+  dependencies {
+    classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.2'
+  }
+}
+
+apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'java'
+
 group 'be.persgroep'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
-
-sourceCompatibility = 1.8
+sourceCompatibility = 1.9
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+  testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.2'
+  testCompile 'org.junit.jupiter:junit-jupiter-params:5.0.2'
+  testCompile 'org.assertj:assertj-core:3.8.0'
+
+  testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.2'
 }
